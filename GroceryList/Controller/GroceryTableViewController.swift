@@ -122,6 +122,11 @@ class GroceryTableViewController: UITableViewController {
         
         present(alertController, animated: true, completion: nil)
         
+        self.tableView.reloadData()
+        
+        func setNeedsUpdateConfiguration(){
+            self.tableView.reloadData()}
+        
     }
     
     
@@ -132,7 +137,6 @@ class GroceryTableViewController: UITableViewController {
         return groseries.count
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "shoppingCell", for: indexPath)
         
@@ -140,16 +144,18 @@ class GroceryTableViewController: UITableViewController {
         let grocery = groseries[indexPath.row]
         cell.textLabel?.text = grocery.value(forKey: "item") as? String
         cell.accessoryType = grocery.completed ? .checkmark : .none
+        cell.textLabel?.font = UIFont(name:"Zapfino", size:15)
+        cell.textLabel?.textColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1.0)
+        cell.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 1.0)
         return cell
     }
     
-    // Mark:- Table view delegate
+    // Mark: - Table view delegate
     
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             manageObjectContext?.delete(groseries[indexPath.row])
-            
         }
         self.saveData()
     }
@@ -157,6 +163,10 @@ class GroceryTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         groseries[indexPath.row].completed = !groseries[indexPath.row].completed
         self.saveData()
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
     
     // MARK: - Navigation
