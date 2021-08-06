@@ -79,7 +79,7 @@ class GroceryTableViewController: UITableViewController {
     
     @IBAction func deleteAllItems(_ sender: Any) {
         
-        let alertController = UIAlertController(title: "Delete All", message: "Would you like to delete all items in list?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Delete All", message: "Would you like to delete all items in list?", preferredStyle: .actionSheet)
         
         let addActionButton = UIAlertAction(title: "Delete", style: .default) { alertAction in
             
@@ -108,10 +108,11 @@ class GroceryTableViewController: UITableViewController {
                 NSManagedObjectContext.mergeChanges(
                     fromRemoteContextSave: deletedObjects,
                     into: [])
+                self.saveData()
             }catch {
                 print("All data has been deleted!")
             }
-            
+            self.tableView.reloadData()
         }
         
         let cancelButton = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
@@ -121,11 +122,6 @@ class GroceryTableViewController: UITableViewController {
         
         
         present(alertController, animated: true, completion: nil)
-        
-        self.tableView.reloadData()
-        
-        func setNeedsUpdateConfiguration(){
-            self.tableView.reloadData()}
         
     }
     
@@ -146,7 +142,7 @@ class GroceryTableViewController: UITableViewController {
         cell.accessoryType = grocery.completed ? .checkmark : .none
         cell.textLabel?.font = UIFont(name:"Zapfino", size:15)
         cell.textLabel?.textColor = UIColor(red: 1, green: 0, blue: 1, alpha: 1.0)
-        cell.backgroundColor = UIColor(red: 0, green: 0, blue: 1, alpha: 1.0)
+        cell.backgroundColor = UIColor.systemOrange
         return cell
     }
     
